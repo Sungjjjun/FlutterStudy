@@ -20,7 +20,6 @@ class CurrencyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Transform.translate(
       offset: Offset(0, (order - 1) * -20),
       child: Container(
