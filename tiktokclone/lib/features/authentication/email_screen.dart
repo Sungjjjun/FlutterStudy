@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiktokclone/features/authentication/password_screen.dart';
 import 'package:tiktokclone/features/authentication/widgets/form_button.dart';
 
 import '../../constants/gaps.dart';
@@ -32,45 +33,77 @@ class _EmailScreenState extends State<EmailScreen> {
     super.dispose();
   }
 
+  String? _isEmailValid() {
+    if (_email.isEmpty) return null;
+    final regExp = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    if (!regExp.hasMatch(_email)) {
+      return "Email Not Valid";
+    }
+    return null;
+  }
+
+  void _onScaffoldTab() {
+    FocusScope.of(context).unfocus();
+  }
+
+  void _onSubmit() {
+    if (_email.isEmpty || _isEmailValid() != null) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PasswordScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Sign up'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(Sizes.size32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'What is your email?',
-              style: TextStyle(
-                fontSize: Sizes.size24,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Gaps.v14,
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                hintText: 'Email',
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey.shade400),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey.shade400),
+    return GestureDetector(
+      onTap: _onScaffoldTab,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: const Text('Sign up'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(Sizes.size32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'What is your email?',
+                style: TextStyle(
+                  fontSize: Sizes.size24,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              cursorColor: Theme.of(context).primaryColor,
-            ),
-            Gaps.v14,
-            GestureDetector(
-              onTap: (() {}),
-              child: FormButton(diabled: _email.isEmpty),
-            ),
-          ],
+              Gaps.v14,
+              TextField(
+                keyboardType: TextInputType.emailAddress,
+                onEditingComplete: _onSubmit,
+                controller: _emailController,
+                decoration: InputDecoration(
+                  errorText: _isEmailValid(),
+                  hintText: 'Email',
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                  ),
+                ),
+                cursorColor: Theme.of(context).primaryColor,
+              ),
+              Gaps.v14,
+              GestureDetector(
+                onTap: _onSubmit,
+                child: FormButton(
+                  diabled: _email.isEmpty || _isEmailValid() != null,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
