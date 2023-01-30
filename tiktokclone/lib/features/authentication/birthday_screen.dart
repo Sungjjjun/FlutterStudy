@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
@@ -32,10 +31,11 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void _onNextTab() {
-    Navigator.of(context).push(
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const InterestsScreen(),
       ),
+      (route) => false,
     );
   }
 
