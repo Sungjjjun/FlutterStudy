@@ -1,18 +1,9 @@
 ---
-name: Custom issue template
-about: Describe this issue template's purpose here.
-title: ''
-labels: ''
-assignees: ''
-
----
-
----
 name: 리팩토링
 about: 코드 리팩토링
 title: "[refactor]"
 labels: enhancement
-assignees: hi-june, tidavid1
+assignees: Sungjjjun
 
 ---
 
