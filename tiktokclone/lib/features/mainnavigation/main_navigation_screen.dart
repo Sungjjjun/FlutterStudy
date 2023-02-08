@@ -5,6 +5,7 @@ import 'package:tiktokclone/features/discover/discover_screen.dart';
 import 'package:tiktokclone/features/indox/inbox_screen.dart';
 import 'package:tiktokclone/features/mainnavigation/widgets/nav_tab.dart';
 import 'package:tiktokclone/features/mainnavigation/widgets/post_video_button.dart';
+import 'package:tiktokclone/features/user/user_profile_screen.dart';
 import 'package:tiktokclone/features/videos/video_timeline_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _selectedIndex = 3;
+  int _selectedIndex = 4;
 
   void _onTab(int index) {
     setState(() {
@@ -57,7 +58,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 4,
-            child: Container(),
+            child: const UserProfileScreen(),
           ),
         ],
       ),
