@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktokclone/constants/gaps.dart';
 import 'package:tiktokclone/constants/sizes.dart';
+import 'package:tiktokclone/features/settings/setting_screen.dart';
 import 'package:tiktokclone/features/user/persistent_tab_bar.dart';
 
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({super.key});
+
+  void _onSettingTab(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SettingScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +28,7 @@ class UserProfileScreen extends StatelessWidget {
                 title: const Text("PSJ"),
                 actions: [
                   IconButton(
-                    onPressed: () {},
-                    icon: const FaIcon(
-                      FontAwesomeIcons.gear,
-                      size: Sizes.size20,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
+                    onPressed: () => _onSettingTab(context),
                     icon: const FaIcon(
                       FontAwesomeIcons.gear,
                       size: Sizes.size20,
