@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktokclone/constants/breakpoint.dart';
 import 'package:tiktokclone/constants/gaps.dart';
 import 'package:tiktokclone/constants/sizes.dart';
 
@@ -47,6 +48,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: tabs.length,
       child: Scaffold(
@@ -58,10 +60,15 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               FontAwesomeIcons.arrowLeft,
             ),
           ),
-          title: CupertinoSearchTextField(
-            controller: _textEditingController,
-            onChanged: _onSearchChanged,
-            onSubmitted: _onSearchSumitted,
+          title: Container(
+            constraints: const BoxConstraints(
+              maxWidth: BreakPoint.sm,
+            ),
+            child: CupertinoSearchTextField(
+              controller: _textEditingController,
+              onChanged: _onSearchChanged,
+              onSubmitted: _onSearchSumitted,
+            ),
           ),
           actions: [
             IconButton(
@@ -102,75 +109,79 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 horizontal: Sizes.size6,
               ),
               itemCount: 20,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: size.width > BreakPoint.lg ? 5 : 2,
                 crossAxisSpacing: Sizes.size10,
                 mainAxisSpacing: Sizes.size10,
                 childAspectRatio: 9 / 20,
               ),
-              itemBuilder: (context, index) => Column(
-                children: [
-                  Container(
-                    clipBehavior: Clip.hardEdge,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(Sizes.size4),
-                    ),
-                    child: AspectRatio(
-                      aspectRatio: 9 / 16,
-                      child: FadeInImage.assetNetwork(
-                        fit: BoxFit.cover,
-                        placeholder: "assets/images/placeholder.png",
-                        image:
-                            "https://images.unsplash.com/photo-1666025067647-da80f0385da4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+              itemBuilder: (context, index) => LayoutBuilder(
+                builder: (context, constraints) => Column(
+                  children: [
+                    Container(
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Sizes.size4),
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 9 / 16,
+                        child: FadeInImage.assetNetwork(
+                          fit: BoxFit.cover,
+                          placeholder: "assets/images/placeholder.png",
+                          image:
+                              "https://images.unsplash.com/photo-1666025067647-da80f0385da4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+                        ),
                       ),
                     ),
-                  ),
-                  Gaps.v10,
-                  const Text(
-                    "This is very long caption for my tiktok that im upload just now currently",
-                    style: TextStyle(
-                      fontSize: Sizes.size18,
-                      fontWeight: FontWeight.w500,
+                    Gaps.v10,
+                    Text(
+                      "${constraints.maxWidth}This is very long caption for my tiktok that im upload just now currently",
+                      style: const TextStyle(
+                        fontSize: Sizes.size18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                  Gaps.v5,
-                  DefaultTextStyle(
-                    style: TextStyle(
-                      fontSize: Sizes.size14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey.shade500,
-                    ),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 12,
-                          child: Image.network(
-                            "https://avatars.githubusercontent.com/u/103017099?v=4",
-                          ),
+                    Gaps.v5,
+                    if (constraints.maxWidth < 200 ||
+                        constraints.maxWidth > 250)
+                      DefaultTextStyle(
+                        style: TextStyle(
+                          fontSize: Sizes.size14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey.shade500,
                         ),
-                        Gaps.h5,
-                        const Expanded(
-                          child: Text(
-                            "Sungjjjunnnnnnnnnnnn",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 12,
+                              child: Image.network(
+                                "https://avatars.githubusercontent.com/u/103017099?v=4",
+                              ),
+                            ),
+                            Gaps.h5,
+                            const Expanded(
+                              child: Text(
+                                "Sungjjjunnnnnnnnnnnn",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            FaIcon(
+                              FontAwesomeIcons.heart,
+                              size: Sizes.size14,
+                              color: Colors.grey.shade600,
+                            ),
+                            Gaps.h3,
+                            const Text(
+                              "2.0M",
+                            ),
+                          ],
                         ),
-                        FaIcon(
-                          FontAwesomeIcons.heart,
-                          size: Sizes.size14,
-                          color: Colors.grey.shade600,
-                        ),
-                        Gaps.h3,
-                        const Text(
-                          "2.0M",
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                      ),
+                  ],
+                ),
               ),
             ),
             for (var tab in tabs.skip(1))

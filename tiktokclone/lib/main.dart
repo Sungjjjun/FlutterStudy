@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tiktokclone/constants/sizes.dart';
-import 'package:tiktokclone/features/mainnavigation/main_navigation_screen.dart';
+import 'package:tiktokclone/features/user/user_profile_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.portraitUp,
+    ],
+  );
   runApp(const TikTokApp());
 }
 
@@ -33,7 +41,7 @@ class TikTokApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const MainNavigationScreen(),
+      home: const UserProfileScreen(),
     );
   }
 }

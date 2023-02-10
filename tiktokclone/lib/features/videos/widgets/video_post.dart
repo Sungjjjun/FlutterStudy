@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktokclone/constants/gaps.dart';
@@ -23,11 +24,8 @@ class _VideoPostState extends State<VideoPost>
     with SingleTickerProviderStateMixin {
   bool _isPaused = false;
   late final AnimationController _animationController;
-
+  late final VideoPlayerController _videoPlayerController;
   final Duration _animatedDuration = const Duration(milliseconds: 200);
-
-  final VideoPlayerController _videoPlayerController =
-      VideoPlayerController.asset("assets/videos/video.mp4");
 
   void _onVideoChanged() {
     if (_videoPlayerController.value.isInitialized) {
@@ -39,10 +37,13 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _initVideoPlayer() async {
+    _videoPlayerController =
+        VideoPlayerController.asset("assets/videos/video.mp4");
     await _videoPlayerController.initialize();
     await _videoPlayerController.setLooping(true);
-    setState(() {});
+    if (kIsWeb) await _videoPlayerController.setVolume(0);
     _videoPlayerController.addListener(_onVideoChanged);
+    setState(() {});
   }
 
   @override
