@@ -52,7 +52,6 @@ class InboxScreen extends StatelessWidget {
             trailing: const FaIcon(
               FontAwesomeIcons.chevronRight,
               size: Sizes.size16,
-              color: Colors.black,
             ),
           ),
           Container(
@@ -89,7 +88,6 @@ class InboxScreen extends StatelessWidget {
             trailing: const FaIcon(
               FontAwesomeIcons.chevronRight,
               size: Sizes.size16,
-              color: Colors.black,
             ),
           ),
         ],

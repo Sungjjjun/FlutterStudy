@@ -45,7 +45,6 @@ class _UsernameScreenState extends State<UsernameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Sign up'),
       ),
@@ -62,10 +61,10 @@ class _UsernameScreenState extends State<UsernameScreen> {
               ),
             ),
             Gaps.v14,
-            Text(
-              'You can always change this later.',
-              style: TextStyle(
-                color: Colors.grey.shade500,
+            const Opacity(
+              opacity: 0.7,
+              child: Text(
+                'You can always change this later.',
               ),
             ),
             TextField(

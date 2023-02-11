@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktokclone/constants/gaps.dart';
 import 'package:tiktokclone/constants/sizes.dart';
+import 'package:tiktokclone/utils.dart';
 
 class ChatsDetailScreen extends StatefulWidget {
   const ChatsDetailScreen({super.key});
@@ -73,17 +74,21 @@ class _ChatsDetailScreenState extends State<ChatsDetailScreen> {
           subtitle: const Text("Active now"),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            children: [
               FaIcon(
                 FontAwesomeIcons.flag,
                 size: Sizes.size20,
-                color: Colors.black,
+                color: isDarkMode(context)
+                    ? Colors.grey.shade600
+                    : Colors.grey.shade800,
               ),
               Gaps.h32,
               FaIcon(
                 FontAwesomeIcons.ellipsis,
                 size: Sizes.size20,
-                color: Colors.black,
+                color: isDarkMode(context)
+                    ? Colors.grey.shade600
+                    : Colors.grey.shade800,
               ),
             ],
           ),
@@ -148,48 +153,55 @@ class _ChatsDetailScreenState extends State<ChatsDetailScreen> {
                 top: Sizes.size14,
                 bottom: Sizes.size28,
               ),
-              color: Colors.grey.shade50,
+              color: isDarkMode(context)
+                  ? Colors.grey.shade900
+                  : Colors.grey.shade50,
               child: Row(
                 children: [
                   Expanded(
                     child: TextField(
                       controller: _textEditingController,
                       decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: "Send a messages...",
-                          hintStyle: const TextStyle(
-                            fontSize: Sizes.size18,
-                            color: Colors.grey,
+                        filled: true,
+                        fillColor: isDarkMode(context)
+                            ? Colors.grey.shade800
+                            : Colors.grey.shade200,
+                        hintText: "Send a messages...",
+                        hintStyle: const TextStyle(
+                          fontSize: Sizes.size18,
+                          color: Colors.grey,
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(
+                              Sizes.size32,
+                            ),
+                            topRight: Radius.circular(
+                              Sizes.size32,
+                            ),
+                            bottomLeft: Radius.circular(
+                              Sizes.size32,
+                            ),
                           ),
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(
-                                Sizes.size32,
-                              ),
-                              topRight: Radius.circular(
-                                Sizes.size32,
-                              ),
-                              bottomLeft: Radius.circular(
-                                Sizes.size32,
-                              ),
-                            ),
-                            borderSide: BorderSide.none,
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.only(
+                            right: Sizes.size10,
                           ),
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.only(
-                              right: Sizes.size10,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                FaIcon(
-                                  FontAwesomeIcons.faceSmile,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                          )),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.faceSmile,
+                                color: isDarkMode(context)
+                                    ? Colors.grey.shade600
+                                    : Colors.grey.shade800,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   Gaps.h20,
@@ -198,12 +210,16 @@ class _ChatsDetailScreenState extends State<ChatsDetailScreen> {
                     width: 50,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.grey.shade300,
+                      color: isDarkMode(context)
+                          ? Colors.grey.shade800
+                          : Colors.grey.shade200,
                     ),
-                    child: const Center(
+                    child: Center(
                       child: FaIcon(
                         FontAwesomeIcons.paperPlane,
-                        color: Colors.white,
+                        color: isDarkMode(context)
+                            ? Colors.grey.shade600
+                            : Colors.grey.shade800,
                         size: Sizes.size28,
                       ),
                     ),

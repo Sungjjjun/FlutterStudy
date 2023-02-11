@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktokclone/constants/breakpoint.dart';
 import 'package:tiktokclone/constants/gaps.dart';
 import 'package:tiktokclone/constants/sizes.dart';
+import 'package:tiktokclone/utils.dart';
 
 final tabs = [
   "Top",
@@ -65,6 +66,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               maxWidth: BreakPoint.sm,
             ),
             child: CupertinoSearchTextField(
+              style: TextStyle(
+                color: isDarkMode(context) ? Colors.white : Colors.black,
+              ),
               controller: _textEditingController,
               onChanged: _onSearchChanged,
               onSubmitted: _onSearchSumitted,
@@ -89,9 +93,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               fontWeight: FontWeight.w600,
               fontSize: Sizes.size16,
             ),
-            labelColor: Colors.black,
-            unselectedLabelColor: Colors.grey.shade500,
-            indicatorColor: Colors.grey,
+            indicatorColor: Theme.of(context).tabBarTheme.indicatorColor,
             tabs: [
               for (var tab in tabs)
                 Tab(
@@ -134,52 +136,53 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       ),
                     ),
                     Gaps.v10,
-                    Text(
-                      "${constraints.maxWidth}This is very long caption for my tiktok that im upload just now currently",
-                      style: const TextStyle(
+                    const Text(
+                      "This is very long caption for my tiktok that im upload just now currently",
+                      style: TextStyle(
                         fontSize: Sizes.size18,
                         fontWeight: FontWeight.w500,
+                        height: 1.1,
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
                     Gaps.v5,
-                    if (constraints.maxWidth < 200 ||
-                        constraints.maxWidth > 250)
-                      DefaultTextStyle(
-                        style: TextStyle(
-                          fontSize: Sizes.size14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey.shade500,
-                        ),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 12,
-                              child: Image.network(
-                                "https://avatars.githubusercontent.com/u/103017099?v=4",
-                              ),
-                            ),
-                            Gaps.h5,
-                            const Expanded(
-                              child: Text(
-                                "Sungjjjunnnnnnnnnnnn",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            FaIcon(
-                              FontAwesomeIcons.heart,
-                              size: Sizes.size14,
-                              color: Colors.grey.shade600,
-                            ),
-                            Gaps.h3,
-                            const Text(
-                              "2.0M",
-                            ),
-                          ],
-                        ),
+                    DefaultTextStyle(
+                      style: TextStyle(
+                        fontSize: Sizes.size14,
+                        fontWeight: FontWeight.w600,
+                        color: isDarkMode(context)
+                            ? Colors.grey.shade300
+                            : Colors.grey.shade500,
                       ),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 12,
+                            child: Image.network(
+                              "https://avatars.githubusercontent.com/u/103017099?v=4",
+                            ),
+                          ),
+                          Gaps.h5,
+                          const Expanded(
+                            child: Text(
+                              "Sungjjjunnnnnnnnnnnn",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          FaIcon(
+                            FontAwesomeIcons.heart,
+                            size: Sizes.size14,
+                            color: Colors.grey.shade600,
+                          ),
+                          Gaps.h3,
+                          const Text(
+                            "2.0M",
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -18,9 +18,10 @@ class UserProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: DefaultTabController(
+    return Scaffold(
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+      body: SafeArea(
+        child: DefaultTabController(
           length: 2,
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -40,6 +41,7 @@ class UserProfileScreen extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: Column(
                     children: [
+                      Gaps.v32,
                       const CircleAvatar(
                         radius: 50,
                         backgroundImage: NetworkImage(
@@ -77,14 +79,14 @@ class UserProfileScreen extends StatelessWidget {
                                   "37",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: Sizes.size18,
+                                    fontSize: Sizes.size16,
                                   ),
                                 ),
                                 Gaps.v5,
                                 Text(
                                   "Following",
                                   style: TextStyle(
-                                    fontSize: Sizes.size16,
+                                    fontSize: Sizes.size14,
                                     color: Colors.grey.shade500,
                                   ),
                                 ),
@@ -103,14 +105,14 @@ class UserProfileScreen extends StatelessWidget {
                                   "10M",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: Sizes.size18,
+                                    fontSize: Sizes.size16,
                                   ),
                                 ),
                                 Gaps.v5,
                                 Text(
                                   "Followers",
                                   style: TextStyle(
-                                    fontSize: Sizes.size16,
+                                    fontSize: Sizes.size14,
                                     color: Colors.grey.shade400,
                                   ),
                                 ),
@@ -129,14 +131,14 @@ class UserProfileScreen extends StatelessWidget {
                                   "194.3M",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: Sizes.size18,
+                                    fontSize: Sizes.size16,
                                   ),
                                 ),
                                 Gaps.v5,
                                 Text(
                                   "Likes",
                                   style: TextStyle(
-                                    fontSize: Sizes.size16,
+                                    fontSize: Sizes.size14,
                                     color: Colors.grey.shade500,
                                   ),
                                 ),
