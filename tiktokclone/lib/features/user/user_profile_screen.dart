@@ -5,9 +5,20 @@ import 'package:tiktokclone/constants/sizes.dart';
 import 'package:tiktokclone/features/settings/setting_screen.dart';
 import 'package:tiktokclone/features/user/persistent_tab_bar.dart';
 
-class UserProfileScreen extends StatelessWidget {
-  const UserProfileScreen({super.key});
+class UserProfileScreen extends StatefulWidget {
+  final String username;
+  final String tab;
+  const UserProfileScreen({
+    super.key,
+    required this.username,
+    required this.tab,
+  });
 
+  @override
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
   void _onSettingTab(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -22,12 +33,13 @@ class UserProfileScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       body: SafeArea(
         child: DefaultTabController(
+          initialIndex: widget.tab == "likes" ? 1 : 0,
           length: 2,
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
                 SliverAppBar(
-                  title: const Text("PSJ"),
+                  title: Text(widget.username),
                   actions: [
                     IconButton(
                       onPressed: () => _onSettingTab(context),
