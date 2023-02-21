@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktokclone/constants/gaps.dart';
 import 'package:tiktokclone/constants/sizes.dart';
-import 'package:tiktokclone/features/mainnavigation/main_navigation_screen.dart';
 import 'package:tiktokclone/utils.dart';
 
 enum Direction { left, right }
@@ -21,12 +21,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
   Page _showingPage = Page.first;
 
   void _onEnterApp() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const MainNavigationScreen(),
-      ),
-      (route) => false,
-    );
+    context.go("/home");
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
