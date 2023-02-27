@@ -8,8 +8,9 @@ import 'package:tiktokclone/features/indox/inbox_screen.dart';
 import 'package:tiktokclone/common/widgets/mainnavigation/widgets/nav_tab.dart';
 import 'package:tiktokclone/common/widgets/mainnavigation/widgets/post_video_button.dart';
 import 'package:tiktokclone/features/user/user_profile_screen.dart';
-import 'package:tiktokclone/features/videos/video_recording_screen.dart';
-import 'package:tiktokclone/features/videos/video_timeline_screen.dart';
+import 'package:tiktokclone/features/videos/views/video_recording_screen.dart';
+import 'package:tiktokclone/features/videos/views/video_timeline_screen.dart';
+
 import 'package:tiktokclone/utils.dart';
 
 class MainNavigationScreen extends StatefulWidget {
