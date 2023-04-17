@@ -1,6 +1,6 @@
-# toonflix
+# toonflix & TikTok clone
 
-A new Flutter project.
+Practice Flutter Programming by Cloning
 
 ## Getting Started
 
