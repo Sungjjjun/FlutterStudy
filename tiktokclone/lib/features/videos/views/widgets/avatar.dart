@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tiktokclone/features/videos/view_models/avatar_view_model.dart';
+import 'package:tiktokclone/features/user/view_models/avatar_view_model.dart';
 
 class Avatar extends ConsumerWidget {
   final bool hasAvatar;

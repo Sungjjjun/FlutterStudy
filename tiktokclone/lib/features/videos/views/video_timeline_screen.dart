@@ -11,7 +11,7 @@ class VideoTimelineScreen extends ConsumerStatefulWidget {
 }
 
 class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
-  int _itemCount = 4;
+  int _itemCount = 0;
   final Duration _scrollDuration = const Duration(
     milliseconds: 250,
   );
@@ -27,7 +27,7 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
       curve: _scrollCurve,
     );
     if (page == _itemCount - 1) {
-      _itemCount = _itemCount + 4;
+      ref.watch(timelineProvider.notifier).fetchNextPage();
     }
     setState(() {});
   }
@@ -46,36 +46,37 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
     super.dispose();
   }
 
-  Future<void> _onRefresh() {
-    return Future.delayed(
-      const Duration(seconds: 5),
-    );
+  Future<void> _onRefresh() async {
+    return ref.watch(timelineProvider.notifier).refresh();
   }
 
   @override
   Widget build(BuildContext context) {
     return ref.watch(timelineProvider).when(
-          data: (videos) => RefreshIndicator(
-            displacement: 50,
-            edgeOffset: 20,
-            color: Theme.of(context).primaryColor,
-            strokeWidth: 2,
-            onRefresh: _onRefresh,
-            child: PageView.builder(
-              controller: _pageController,
-              itemBuilder: (context, index) {
-                final videoData = videos[index];
-                return VideoPost(
-                  onVideoFinished: _onVideoFinished,
-                  index: index,
-                  videoData: videoData,
-                );
-              },
-              scrollDirection: Axis.vertical,
-              itemCount: videos.length,
-              onPageChanged: _onPagedChanged,
-            ),
-          ),
+          data: (videos) {
+            _itemCount = videos.length;
+            return RefreshIndicator(
+              displacement: 50,
+              edgeOffset: 20,
+              color: Theme.of(context).primaryColor,
+              strokeWidth: 2,
+              onRefresh: _onRefresh,
+              child: PageView.builder(
+                controller: _pageController,
+                itemBuilder: (context, index) {
+                  final videoData = videos[index];
+                  return VideoPost(
+                    onVideoFinished: _onVideoFinished,
+                    index: index,
+                    videoData: videoData,
+                  );
+                },
+                scrollDirection: Axis.vertical,
+                itemCount: videos.length,
+                onPageChanged: _onPagedChanged,
+              ),
+            );
+          },
           error: (error, stackTrace) => Center(
             child: Text(
               "Could not load videos: $error",

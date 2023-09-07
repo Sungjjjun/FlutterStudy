@@ -19,11 +19,30 @@ class VideoRepostory {
     await _db.collection('videos').add(model.toJson());
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> fetchVideos() async {
-    return _db
+  Future<void> likeVideo(String videoId, String userId) async {
+    final query = _db.collection('likes').doc('${videoId}000$userId');
+    final like = await query.get();
+    if (!like.exists) {
+      await query.set(
+        {
+          'createdAt': DateTime.now().millisecondsSinceEpoch,
+        },
+      );
+    }
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchVideos({
+    int? lastItemCreatedAt,
+  }) async {
+    final query = _db
         .collection('videos')
         .orderBy('createdAt', descending: true)
-        .get();
+        .limit(2);
+    if (lastItemCreatedAt == null) {
+      return query.get();
+    } else {
+      return query.startAfter([lastItemCreatedAt]).get();
+    }
   }
 }
 
