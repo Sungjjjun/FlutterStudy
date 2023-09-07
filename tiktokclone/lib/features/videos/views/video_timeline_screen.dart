@@ -63,8 +63,14 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
             onRefresh: _onRefresh,
             child: PageView.builder(
               controller: _pageController,
-              itemBuilder: (context, index) =>
-                  VideoPost(onVideoFinished: _onVideoFinished, index: index),
+              itemBuilder: (context, index) {
+                final videoData = videos[index];
+                return VideoPost(
+                  onVideoFinished: _onVideoFinished,
+                  index: index,
+                  videoData: videoData,
+                );
+              },
               scrollDirection: Axis.vertical,
               itemCount: videos.length,
               onPageChanged: _onPagedChanged,

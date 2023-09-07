@@ -18,6 +18,13 @@ class VideoRepostory {
   Future<void> saveVideo(VideoModel model) async {
     await _db.collection('videos').add(model.toJson());
   }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchVideos() async {
+    return _db
+        .collection('videos')
+        .orderBy('createdAt', descending: true)
+        .get();
+  }
 }
 
 final videoRepo = Provider((ref) => VideoRepostory());
