@@ -32,6 +32,7 @@ class VideoPost extends ConsumerStatefulWidget {
 class VideoPostState extends ConsumerState<VideoPost>
     with SingleTickerProviderStateMixin {
   bool _isPaused = false;
+  bool _isLiked = false;
 
   late final AnimationController _animationController;
   late final VideoPlayerController _videoPlayerController;
@@ -46,8 +47,10 @@ class VideoPostState extends ConsumerState<VideoPost>
     }
   }
 
-  void _onLikeTap() {
+  void _onLikeTap() async {
     ref.read(videoPostProvider(widget.videoData.id).notifier).likeVideo();
+    _isLiked = !_isLiked;
+    setState(() {});
   }
 
   void _initVideoPlayer() async {
@@ -57,6 +60,9 @@ class VideoPostState extends ConsumerState<VideoPost>
     await _videoPlayerController.setLooping(true);
     if (kIsWeb) await _videoPlayerController.setVolume(0);
     _videoPlayerController.addListener(_onVideoChanged);
+    _isLiked = await ref
+        .read(videoPostProvider(widget.videoData.id).notifier)
+        .isLikedVideo();
     setState(() {});
   }
 
@@ -227,6 +233,7 @@ class VideoPostState extends ConsumerState<VideoPost>
                 GestureDetector(
                   onTap: _onLikeTap,
                   child: VideoButton(
+                    color: _isLiked ? Colors.red : Colors.white,
                     icon: FontAwesomeIcons.solidHeart,
                     ment: widget.videoData.likes.toString(),
                   ),
@@ -235,12 +242,14 @@ class VideoPostState extends ConsumerState<VideoPost>
                 GestureDetector(
                   onTap: () => _onCommentTab(context),
                   child: VideoButton(
+                    color: Colors.white,
                     icon: FontAwesomeIcons.solidComment,
                     ment: "${widget.videoData.likes.toString()}K",
                   ),
                 ),
                 Gaps.v24,
                 const VideoButton(
+                  color: Colors.white,
                   icon: FontAwesomeIcons.share,
                   ment: 'Share',
                 ),

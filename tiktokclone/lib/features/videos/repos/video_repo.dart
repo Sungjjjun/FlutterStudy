@@ -28,7 +28,16 @@ class VideoRepostory {
           'createdAt': DateTime.now().millisecondsSinceEpoch,
         },
       );
+    } else {
+      await query.delete();
     }
+  }
+
+  Future<bool> isLikedVideo(String videoId, String userId) async {
+    final query =
+        _db.collection('users').doc(userId).collection('likes').doc(videoId);
+    final like = await query.get();
+    return like.exists;
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> fetchVideos({
