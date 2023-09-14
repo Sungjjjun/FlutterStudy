@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktokclone/constants/gaps.dart';
 import 'package:tiktokclone/constants/sizes.dart';
+import 'package:tiktokclone/features/authentication/repos/authentication_repo.dart';
+import 'package:tiktokclone/features/indox/view_models/message_view_model.dart';
 import 'package:tiktokclone/utils.dart';
 
-class ChatsDetailScreen extends StatefulWidget {
+class ChatsDetailScreen extends ConsumerStatefulWidget {
   static const String routeName = "chatsDetail";
   static const String routeURL = ":chatId";
   final String chatId;
@@ -15,19 +18,22 @@ class ChatsDetailScreen extends StatefulWidget {
   });
 
   @override
-  State<ChatsDetailScreen> createState() => _ChatsDetailScreenState();
+  ConsumerState<ChatsDetailScreen> createState() => _ChatsDetailScreenState();
 }
 
-class _ChatsDetailScreenState extends State<ChatsDetailScreen> {
+class _ChatsDetailScreenState extends ConsumerState<ChatsDetailScreen> {
   final TextEditingController _textEditingController = TextEditingController();
-  String _text = "";
+
+  void _onSendPress() {
+    final text = _textEditingController.text;
+    if (text == '') return;
+    ref.read(messageProvider.notifier).sendMessage(text);
+    _textEditingController.text = '';
+  }
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _text = _textEditingController.text;
-    });
   }
 
   @override
@@ -38,6 +44,7 @@ class _ChatsDetailScreenState extends State<ChatsDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(messageProvider).isLoading;
     return Scaffold(
       appBar: AppBar(
         title: ListTile(
@@ -103,135 +110,145 @@ class _ChatsDetailScreenState extends State<ChatsDetailScreen> {
       ),
       body: Stack(
         children: [
-          ListView.separated(
-            padding: const EdgeInsets.symmetric(
-              vertical: Sizes.size12,
-              horizontal: Sizes.size14,
-            ),
-            itemBuilder: (context, index) {
-              final isMine = index % 2 == 0;
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment:
-                    isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(Sizes.size14),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(
-                          Sizes.size20,
-                        ),
-                        topRight: const Radius.circular(
-                          Sizes.size20,
-                        ),
-                        bottomLeft: Radius.circular(
-                          isMine ? Sizes.size20 : 0,
-                        ),
-                        bottomRight: Radius.circular(
-                          isMine ? 0 : Sizes.size20,
-                        ),
-                      ),
-                      //border: Border.all(color: ),
-                      color:
-                          isMine ? Colors.blue : Theme.of(context).primaryColor,
+          ref.watch(chatProvider).when(
+                data: (data) {
+                  return ListView.separated(
+                    reverse: true,
+                    padding: EdgeInsets.only(
+                      top: Sizes.size20,
+                      bottom:
+                          MediaQuery.of(context).padding.bottom + Sizes.size96,
+                      right: Sizes.size14,
+                      left: Sizes.size14,
                     ),
-                    child: const Text(
-                      "This is a message",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: Sizes.size16,
-                      ),
-                    ),
+                    itemBuilder: (context, index) {
+                      final message = data[index];
+                      final isMine =
+                          message.userId == ref.watch(authRepo).user!.uid;
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: isMine
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(Sizes.size14),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: const Radius.circular(
+                                  Sizes.size20,
+                                ),
+                                topRight: const Radius.circular(
+                                  Sizes.size20,
+                                ),
+                                bottomLeft: Radius.circular(
+                                  isMine ? Sizes.size20 : 0,
+                                ),
+                                bottomRight: Radius.circular(
+                                  isMine ? 0 : Sizes.size20,
+                                ),
+                              ),
+                              //border: Border.all(color: ),
+                              color: isMine
+                                  ? Colors.blue
+                                  : Theme.of(context).primaryColor,
+                            ),
+                            child: Text(
+                              message.text,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: Sizes.size16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    separatorBuilder: (context, index) => Gaps.v10,
+                    itemCount: data.length,
+                  );
+                },
+                error: (error, stackTrace) => Center(
+                  child: Text(
+                    error.toString(),
                   ),
-                ],
-              );
-            },
-            separatorBuilder: (context, index) => Gaps.v10,
-            itemCount: 10,
-          ),
+                ),
+                loading: () => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
           Positioned(
             bottom: 0,
             width: MediaQuery.of(context).size.width,
-            child: BottomAppBar(
-              padding: const EdgeInsets.only(
-                right: Sizes.size14,
-                left: Sizes.size14,
-                top: Sizes.size14,
-                bottom: Sizes.size28,
-              ),
-              color: isDarkMode(context)
-                  ? Colors.grey.shade900
-                  : Colors.grey.shade50,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _textEditingController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: isDarkMode(context)
-                            ? Colors.grey.shade800
-                            : Colors.grey.shade200,
-                        hintText: "Send a messages...",
-                        hintStyle: const TextStyle(
-                          fontSize: Sizes.size18,
-                          color: Colors.grey,
+            child: Container(
+              color: isDarkMode(context) ? Colors.black : Colors.grey.shade50,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: Sizes.size10,
+                  left: Sizes.size40,
+                  right: Sizes.size40,
+                  bottom: MediaQuery.of(context).padding.bottom,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _textEditingController,
+                        style: TextStyle(
+                          color: isDarkMode(context)
+                              ? Colors.grey.shade200
+                              : Colors.grey.shade800,
                         ),
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(
-                              Sizes.size32,
-                            ),
-                            topRight: Radius.circular(
-                              Sizes.size32,
-                            ),
-                            bottomLeft: Radius.circular(
-                              Sizes.size32,
-                            ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: isDarkMode(context)
+                              ? Colors.grey.shade800
+                              : Colors.grey.shade200,
+                          hintText: "Send a messages...",
+                          hintStyle: const TextStyle(
+                            fontSize: Sizes.size18,
+                            color: Colors.grey,
                           ),
-                          borderSide: BorderSide.none,
-                        ),
-                        suffixIcon: Padding(
-                          padding: const EdgeInsets.only(
-                            right: Sizes.size10,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.faceSmile,
-                                color: isDarkMode(context)
-                                    ? Colors.grey.shade600
-                                    : Colors.grey.shade800,
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(
+                                Sizes.size32,
                               ),
-                            ],
+                              topRight: Radius.circular(
+                                Sizes.size32,
+                              ),
+                              bottomLeft: Radius.circular(
+                                Sizes.size32,
+                              ),
+                            ),
+                            borderSide: BorderSide.none,
+                          ),
+                          suffixIcon: Padding(
+                            padding: const EdgeInsets.only(
+                              right: Sizes.size10,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: isLoading ? null : _onSendPress,
+                                  child: FaIcon(
+                                    isLoading
+                                        ? FontAwesomeIcons.hourglass
+                                        : FontAwesomeIcons.paperPlane,
+                                    color: isDarkMode(context)
+                                        ? Colors.grey.shade600
+                                        : Colors.grey.shade800,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Gaps.h20,
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: isDarkMode(context)
-                          ? Colors.grey.shade800
-                          : Colors.grey.shade200,
-                    ),
-                    child: Center(
-                      child: FaIcon(
-                        FontAwesomeIcons.paperPlane,
-                        color: isDarkMode(context)
-                            ? Colors.grey.shade600
-                            : Colors.grey.shade800,
-                        size: Sizes.size28,
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
